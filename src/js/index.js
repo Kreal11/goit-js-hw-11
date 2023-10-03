@@ -29,7 +29,7 @@ const renderPage = async () => {
 
     if (page === lastPage) {
       loadMoreBtn.classList.add('is-hidden');
-      Notiflix.Notify.warning(
+      Notiflix.Notify.info(
         'We are sorry, but you have reached the end of search results.'
       );
     }
