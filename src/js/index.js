@@ -49,7 +49,7 @@ function createMarkup(images) {
   const markup = images
     .map(image => {
       return `<a href="${image.largeImageURL}" class="photo-card">
-    <img src="${image.webformatURL}" alt="Tags: ${image.tags}" loading="lazy" width=250 height=200 /></a>
+    <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" width=250 height=200 />
     <div class="info">
     <p class="info-item">
       <b>Likes: ${image.likes}</b>
@@ -64,7 +64,7 @@ function createMarkup(images) {
     <b>Downloads: ${image.downloads}</b>
     </p>
     </div>
-    `;
+    </a>`;
     })
     .join('');
   divEl.insertAdjacentHTML('beforeend', markup);
@@ -72,6 +72,8 @@ function createMarkup(images) {
 
 function onSubmitBtn(event) {
   event.preventDefault();
+
+  loadMoreBtn.classList.add('is-hidden');
 
   page = 1;
   searchQuery = event.target.elements.searchQuery.value.trim();
@@ -81,7 +83,10 @@ function onSubmitBtn(event) {
 }
 
 function onLoadMoreData() {
+  loadMoreBtn.classList.add('is-hidden');
+
   page += 1;
 
   renderPage();
+  loadMoreBtn.classList.remove('is-hidden');
 }
