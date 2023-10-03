@@ -1,9 +1,10 @@
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
 import { fetchImages } from './img-api';
 
 const formEl = document.querySelector('.search-form');
 const divEl = document.querySelector('.gallery');
-// const inputEl = document.querySelector('[name=searchQuery]');
 const loadMoreBtn = document.querySelector('.load-more');
 
 formEl.addEventListener('submit', onSubmitBtn);
@@ -13,6 +14,11 @@ let page = 1;
 let totalAmountOfImages = 500;
 let amountPerPage = 40;
 let searchQuery = '';
+
+let gallery = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
 const renderPage = async () => {
   const lastPage = Math.ceil(totalAmountOfImages / amountPerPage);
@@ -25,6 +31,7 @@ const renderPage = async () => {
       );
     }
     createMarkup(images);
+    gallery.refresh();
     loadMoreBtn.classList.remove('is-hidden');
 
     if (page === lastPage) {
@@ -41,8 +48,8 @@ const renderPage = async () => {
 function createMarkup(images) {
   const markup = images
     .map(image => {
-      return `<div class="photo-card">
-    <img src="${image.webformatURL}" alt="Tags: ${image.tags}" loading="lazy" width=250 height=200 />
+      return `<a href="${image.largeImageURL}" class="photo-card">
+    <img src="${image.webformatURL}" alt="Tags: ${image.tags}" loading="lazy" width=250 height=200 /></a>
     <div class="info">
     <p class="info-item">
       <b>Likes: ${image.likes}</b>
@@ -57,7 +64,7 @@ function createMarkup(images) {
     <b>Downloads: ${image.downloads}</b>
     </p>
     </div>
-    </div>`;
+    `;
     })
     .join('');
   divEl.insertAdjacentHTML('beforeend', markup);
