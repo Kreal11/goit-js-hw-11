@@ -12,6 +12,11 @@ const onSubmitBtn = async event => {
 
   try {
     const images = await fetchImages(term);
+    if (images.length === 0) {
+      return Notiflix.Notify.warning(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    }
     renderPage(images);
   } catch (error) {
     Notiflix.Notify.failure('Oops, someting went wrong!');
