@@ -6,6 +6,8 @@ import { fetchImages } from './img-api';
 const formEl = document.querySelector('.search-form');
 const divEl = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
+const inputEl = document.querySelector('[name=searchQuery]');
+const searchBtn = document.querySelector('.search-btn');
 
 formEl.addEventListener('submit', onSubmitBtn);
 loadMoreBtn.addEventListener('click', onLoadMoreData);
@@ -25,13 +27,17 @@ const renderPage = async () => {
 
   try {
     const images = await fetchImages(searchQuery, page);
+
     if (images.length === 0) {
       return Notiflix.Notify.warning(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
+    Notiflix.Notify.success('Images are loading');
     createMarkup(images);
+
     gallery.refresh();
+
     loadMoreBtn.classList.remove('is-hidden');
 
     if (page === lastPage) {
@@ -43,6 +49,8 @@ const renderPage = async () => {
   } catch (error) {
     Notiflix.Notify.failure('Oops, someting went wrong!');
   }
+  inputEl.disabled = false;
+  searchBtn.disabled = false;
 };
 
 function createMarkup(images) {
@@ -73,6 +81,9 @@ function createMarkup(images) {
 function onSubmitBtn(event) {
   event.preventDefault();
 
+  inputEl.disabled = true;
+  searchBtn.disabled = true;
+
   loadMoreBtn.classList.add('is-hidden');
 
   page = 1;
@@ -83,10 +94,8 @@ function onSubmitBtn(event) {
 }
 
 function onLoadMoreData() {
+  page += 1;
   loadMoreBtn.classList.add('is-hidden');
 
-  page += 1;
-
   renderPage();
-  loadMoreBtn.classList.remove('is-hidden');
 }
