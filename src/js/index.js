@@ -22,10 +22,6 @@ let gallery = new SimpleLightbox('.gallery a', {
 
 const renderPage = async () => {
   try {
-    // Notiflix.Notify.success('Images are loading', {
-    //   timeout: 1500,
-    // });
-
     const images = await fetchImages(searchQuery, page);
 
     if (images.hits.length === 0) {
@@ -33,6 +29,8 @@ const renderPage = async () => {
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
+
+    // Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
 
     createMarkup(images.hits);
 
@@ -80,11 +78,11 @@ function createMarkup(images) {
   divEl.insertAdjacentHTML('beforeend', markup);
 }
 
-function onSubmitBtn(event) {
+async function onSubmitBtn(event) {
   event.preventDefault();
 
   if (inputEl.value.trim() === '') {
-    Notiflix.Notify.warning('Please, fill the form!');
+    Notiflix.Notify.warning('Please, fill the form! Form should not be empty!');
     return;
   }
 
@@ -92,6 +90,10 @@ function onSubmitBtn(event) {
   searchBtn.disabled = true;
 
   loadMoreBtn.classList.add('is-hidden');
+
+  const images = await fetchImages(searchQuery, page);
+
+  Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
 
   page = 1;
   searchQuery = event.target.elements.searchQuery.value.trim();
