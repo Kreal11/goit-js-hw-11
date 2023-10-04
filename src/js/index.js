@@ -1,7 +1,7 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
-import { fetchImages } from './img-api';
+import { fetchImages, per_page } from './img-api';
 
 const formEl = document.querySelector('.search-form');
 const divEl = document.querySelector('.gallery');
@@ -13,8 +13,6 @@ formEl.addEventListener('submit', onSubmitBtn);
 loadMoreBtn.addEventListener('click', onLoadMoreData);
 
 let page = 1;
-let totalAmountOfImages = 500;
-let amountPerPage = 40;
 let searchQuery = '';
 
 let gallery = new SimpleLightbox('.gallery a', {
@@ -23,22 +21,26 @@ let gallery = new SimpleLightbox('.gallery a', {
 });
 
 const renderPage = async () => {
-  const lastPage = Math.ceil(totalAmountOfImages / amountPerPage);
-
   try {
+    // Notiflix.Notify.success('Images are loading', {
+    //   timeout: 1500,
+    // });
+
     const images = await fetchImages(searchQuery, page);
 
-    if (images.length === 0) {
+    if (images.hits.length === 0) {
       return Notiflix.Notify.warning(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
-    Notiflix.Notify.success('Images are loading');
-    createMarkup(images);
+
+    createMarkup(images.hits);
 
     gallery.refresh();
 
     loadMoreBtn.classList.remove('is-hidden');
+
+    const lastPage = Math.ceil(images.totalHits / per_page);
 
     if (page === lastPage) {
       loadMoreBtn.classList.add('is-hidden');
@@ -80,6 +82,11 @@ function createMarkup(images) {
 
 function onSubmitBtn(event) {
   event.preventDefault();
+
+  if (inputEl.value.trim() === '') {
+    Notiflix.Notify.warning('Please, fill the form!');
+    return;
+  }
 
   inputEl.disabled = true;
   searchBtn.disabled = true;
