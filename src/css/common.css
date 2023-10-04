@@ -44,9 +44,10 @@
   border-radius: 5px;
   cursor: pointer;
   margin-left: 10px;
+  transition: background-color 0.2s;
 }
 
-.load-more {
+.search-form .search-btn .load-more {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -60,6 +61,11 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.load-more:active {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .photo-card {
