@@ -11,6 +11,14 @@
   overflow: hidden;
 }
 
+body {
+  background-color: aliceblue;
+}
+
+img {
+  border-bottom: 1px solid #afafaf;
+}
+
 .gallery {
   margin-bottom: 20px;
   display: flex;
@@ -30,6 +38,7 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 200px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .search-form .search-btn {
@@ -42,12 +51,17 @@
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
   cursor: pointer;
   margin-left: 10px;
   transition: background-color 0.2s;
 }
 
-.search-form .search-btn .load-more {
+.search-btn:active {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.load-more {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -60,12 +74,13 @@
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .load-more:active {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .photo-card {

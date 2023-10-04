@@ -14,6 +14,7 @@ loadMoreBtn.addEventListener('click', onLoadMoreData);
 
 let page = 1;
 let searchQuery = '';
+let submitClick = false;
 
 let gallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
@@ -25,12 +26,16 @@ const renderPage = async () => {
     const images = await fetchImages(searchQuery, page);
 
     if (images.hits.length === 0) {
+      inputEl.disabled = false;
+      searchBtn.disabled = false;
       return Notiflix.Notify.warning(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
 
-    // Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
+    if (submitClick) {
+      Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
+    }
 
     createMarkup(images.hits);
 
@@ -81,6 +86,8 @@ function createMarkup(images) {
 async function onSubmitBtn(event) {
   event.preventDefault();
 
+  submitClick = true;
+
   if (inputEl.value.trim() === '') {
     Notiflix.Notify.warning('Please, fill the form! Form should not be empty!');
     return;
@@ -90,10 +97,6 @@ async function onSubmitBtn(event) {
   searchBtn.disabled = true;
 
   loadMoreBtn.classList.add('is-hidden');
-
-  const images = await fetchImages(searchQuery, page);
-
-  Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
 
   page = 1;
   searchQuery = event.target.elements.searchQuery.value.trim();
@@ -105,6 +108,8 @@ async function onSubmitBtn(event) {
 function onLoadMoreData() {
   page += 1;
   loadMoreBtn.classList.add('is-hidden');
+
+  submitClick = false;
 
   renderPage();
 }
